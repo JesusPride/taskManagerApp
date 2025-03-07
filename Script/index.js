@@ -83,14 +83,25 @@ function updateTaskList(tasks = taskManager.tasks) {
         taskItem.classList.add("list-group-item");
 
         taskItem.innerHTML = `
-            <strong>${task.name}</strong> - ${task.category} <br>
-            <small>Due: ${task.duedate} | Priority: ${task.priority}</small> <br>
-            <div class="d-flex justify-content-end">
-                <button class="btn btn-secondary me-2" onclick="editTask(${task.id})">Edit</button>
-                <button class="btn btn-danger me-2" onclick="deleteTask(${task.id})">Delete</button>
-                <button class="btn btn-info" onclick="toggleCompletion(${task.id})">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                     <strong>${task.name}</strong>
+                     <p>${task.description}</p>
+                <div>
+                    <span class="badge bg-info">${task.category}</span>
+                    <span class= "badge bg-warning">Priority: ${task.priority}</span> <br>
+                    <small>Due: ${task.duedate}</small> 
+                </div>
+                </div>
+               
+              <div class="d-flex justify-content-end">
+                <button class="btn btn-sm btn-secondary me-2" onclick="editTask(${task.id})">Edit</button>
+                <button class="btn btn-sm btn-danger me-2" onclick="deleteTask(${task.id})">Delete</button>
+                <button class="btn btn-sm btn-info" onclick="toggleCompletion(${task.id})">
                     ${task.status === "completed" ? "Undo" : "Completed"} 
                 </button>
+            </div>
+
             </div>
         `;
         taskList.appendChild(taskItem);

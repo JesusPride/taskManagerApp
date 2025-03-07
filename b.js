@@ -141,3 +141,25 @@ document.getElementById("taskForm").addEventListener("submit", function (e) {
 // Load tasks when the page loads
 document.addEventListener("DOMContentLoaded", updateTaskList);
 
+
+
+// Pagination Setup
+function setupPagination(tasks) {
+    const pagination = document.getElementById("pagination");
+    pagination.innerHTML = "";
+    const totalPages = Math.ceil(tasks.length / tasksPerPage);
+
+    for (let i = 1; i <= totalPages; i++) {
+        const pageItem = document.createElement("button");
+        pageItem.classList.add("btn", "btn-outline-secondary", "me-2");
+        pageItem.innerText = i;
+        pageItem.onclick = () => {
+            currentPage = i;
+            filterTasks();
+        };
+        if (i === currentPage) {
+            pageItem.classList.add("active");
+        }
+        pagination.appendChild(pageItem);
+    }
+}
