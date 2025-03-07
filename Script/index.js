@@ -66,6 +66,7 @@ function addTask() {
 
     saveTasks();
     filterTasks();
+    updateDashboard();
     document.getElementById("taskForm").reset();
 
     // Close modal
@@ -116,6 +117,7 @@ function toggleCompletion(taskId) {
     task.status = task.status === "completed" ? "pending" : "completed";
     saveTasks();
     filterTasks();
+    updateDashboard();
 }
 
 // Function to delete task
@@ -123,6 +125,7 @@ function deleteTask(taskId) {
     taskManager.tasks = taskManager.tasks.filter((task) => task.id !== taskId);
     saveTasks();
     filterTasks();
+    updateDashboard();
 }
 
 // Function to edit task
@@ -141,10 +144,21 @@ function editTask(taskId) {
     modal.show();
 }
 
+function updateDashboard(){
+    const total = taskManager.tasks.length;
+    const pending = taskManager.tasks.filter(task => task.status === "pending").length;
+    const completed = taskManager.tasks.filter(task => task.status === "completed").length;
+
+    document.getElementById("totalTasksCount").innerText = total;
+    document.getElementById("pendingTasksCount").innerText = pending;
+    document.getElementById("completedTasksCount").innerText = completed;
+}
+
 // Event Listeners
 window.onload = () => {
     document.getElementById("filterAll").classList.add("active");
     filterTasks();
+    updateDashboard();
 };
 
 // Filter Buttons
@@ -197,6 +211,7 @@ function filterTasks() {
     }
 
     updateTaskList(tasks);
+    updateDashboard();
 }
 
 // Submit Task
