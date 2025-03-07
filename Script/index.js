@@ -87,12 +87,26 @@ function updateTaskList() {
             <small>Due: ${task.duedate} | Priority: ${task.priority}</small> <br>
             <div class = "d-flex justify-content-end">
                 <button class="btn btn-secondary me-2" onclick="editTask(${task.id})">Edit</button>
-                <button class="btn btn-danger" onclick="deleteTask(${task.id})">Delete</button>
+                <button class="btn btn-danger me-2" onclick="deleteTask(${task.id})">Delete</button>
+                <button class="btn btn-info" onclick="toggleCompletion(${task.id})">
+                    ${task.status === "completed" ? "Undo" : "Completed"} 
+                </button>
             </div>
         `;
 
         taskList.appendChild(taskItem);
     });
+}
+
+// Function to mark completeed or undo
+function toggleCompletion(taskId) {
+    const task = taskManager.tasks.find(task => taskId === taskId);
+    if (!task) return;
+
+    task.status = task.status === "completed" ? "pending" : "completed";
+
+    saveTasks();
+    updateTaskList()
 }
 
 // Function to delete task
