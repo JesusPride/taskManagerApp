@@ -22,6 +22,7 @@ const taskManager = {
 };
 
 function saveTasks() {
+    // console.log("Saving tasks:", taskManager.tasks);
     localStorage.setItem("tasks", JSON.stringify(taskManager.tasks));
 }
 
@@ -152,7 +153,29 @@ function updateDashboard(){
     document.getElementById("totalTasksCount").innerText = total;
     document.getElementById("pendingTasksCount").innerText = pending;
     document.getElementById("completedTasksCount").innerText = completed;
+
+    updatePieChart(pending, completed);
 }
+
+// Initialize Pie Chart
+let pieChart;
+function updatePieChart(pending, completed) {
+    const ctx = document.getElementById("taskPieChart").getContext("2d");
+    if (pieChart) {
+        pieChart.destroy();
+    }
+    pieChart = new Chart(ctx, {
+        type: "pie",
+        data: {
+            labels: ["Pending", "Completed"],
+            datasets: [{
+                data: [pending, completed],
+                backgroundColor: ["#FFC107", "#28A745"],
+            }],
+        },
+    });
+}
+
 
 // Event Listeners
 window.onload = () => {
