@@ -22,8 +22,13 @@ const taskManager = {
 };
 
 function saveTasks() {
+    // console.log("Saving tasks:", taskManager.tasks);
     localStorage.setItem("tasks", JSON.stringify(taskManager.tasks));
 }
+
+// Pagination Variable
+let currentPage = 1;
+const tasksPerPage =5;
 
 // Function to add task and update existing one
 function addTask() {
@@ -50,8 +55,8 @@ function addTask() {
             task.category = category;
         }
     } else {
-         // Add new Task
-         const newTask = {
+        // Add new Task
+        const newTask = {
             id: Date.now(),
             name,
             description,
@@ -65,7 +70,8 @@ function addTask() {
     }
 
     saveTasks();
-    updateTaskList();
+    filterTasks();
+    updateDashboard();
     document.getElementById("taskForm").reset();
 
     // Close modal
@@ -73,47 +79,58 @@ function addTask() {
     modal.hide();
 }
 
-// Function to update tasklist in the UI
-function updateTaskList() {
+// Function to update task list in the UI
+function updateTaskList(tasks = taskManager.tasks) {
     const taskList = document.getElementById("taskList");
     taskList.innerHTML = "";
 
-    taskManager.tasks.forEach((task) => {
+    tasks.forEach((task) => {
         const taskItem = document.createElement("li");
         taskItem.classList.add("list-group-item");
 
         taskItem.innerHTML = `
-            <strong>${task.name}</strong> - ${task.category} <br>
-            <small>Due: ${task.duedate} | Priority: ${task.priority}</small> <br>
-            <div class = "d-flex justify-content-end">
-                <button class="btn btn-secondary me-2" onclick="editTask(${task.id})">Edit</button>
-                <button class="btn btn-danger me-2" onclick="deleteTask(${task.id})">Delete</button>
-                <button class="btn btn-info" onclick="toggleCompletion(${task.id})">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                     <strong>${task.name}</strong>
+                     <p>${task.description}</p>
+                <div>
+                    <span class="badge bg-info">${task.category}</span>
+                    <span class= "badge bg-warning">Priority: ${task.priority}</span> <br>
+                    <small>Due: ${task.duedate}</small> 
+                </div>
+                </div>
+               
+              <div class="d-flex justify-content-end">
+                <button class="btn btn-sm btn-secondary me-2" onclick="editTask(${task.id})">Edit</button>
+                <button class="btn btn-sm btn-danger me-2" onclick="deleteTask(${task.id})">Delete</button>
+                <button class="btn btn-sm btn-info" onclick="toggleCompletion(${task.id})">
                     ${task.status === "completed" ? "Undo" : "Completed"} 
                 </button>
             </div>
-        `;
 
+            </div>
+        `;
         taskList.appendChild(taskItem);
     });
 }
 
-// Function to mark completeed or undo
+// Function to toggle completion status
 function toggleCompletion(taskId) {
-    const task = taskManager.tasks.find(task => taskId === taskId);
+    const task = taskManager.tasks.find(task => task.id === taskId);
     if (!task) return;
 
     task.status = task.status === "completed" ? "pending" : "completed";
-
     saveTasks();
-    updateTaskList()
+    filterTasks();
+    updateDashboard();
 }
 
 // Function to delete task
 function deleteTask(taskId) {
     taskManager.tasks = taskManager.tasks.filter((task) => task.id !== taskId);
     saveTasks();
-    updateTaskList();
+    filterTasks();
+    updateDashboard();
 }
 
 // Function to edit task
@@ -132,34 +149,103 @@ function editTask(taskId) {
     modal.show();
 }
 
+function updateDashboard(){
+    const total = taskManager.tasks.length;
+    const pending = taskManager.tasks.filter(task => task.status === "pending").length;
+    const completed = taskManager.tasks.filter(task => task.status === "completed").length;
 
-document.getElementById("taskForm").addEventListener("submit", function (e) {
+    document.getElementById("totalTasksCount").innerText = total;
+    document.getElementById("pendingTasksCount").innerText = pending;
+    document.getElementById("completedTasksCount").innerText = completed;
+
+    updatePieChart(pending, completed);
+}
+
+// Initialize Pie Chart
+let pieChart;
+function updatePieChart(pending, completed) {
+    const ctx = document.getElementById("taskPieChart").getContext("2d");
+    if (pieChart) {
+        pieChart.destroy();
+    }
+    pieChart = new Chart(ctx, {
+        type: "pie",
+        data: {
+            labels: ["Pending", "Completed"],
+            datasets: [{
+                data: [pending, completed],
+                backgroundColor: ["#FFC107", "#28A745"],
+            }],
+        },
+    });
+}
+
+
+// Event Listeners
+window.onload = () => {
+    document.getElementById("filterAll").classList.add("active");
+    filterTasks();
+    updateDashboard();
+};
+
+// Filter Buttons
+["filterAll", "filterPending", "filterCompleted"].forEach(id => {
+    document.getElementById(id).addEventListener("click", () => {
+        document.querySelectorAll(".btn-group .btn").forEach(btn => btn.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+        filterTasks();
+    });
+});
+
+// Filter Section Event Listeners
+document.getElementById("searchInput").addEventListener("input", filterTasks);
+document.getElementById("priorityFilter").addEventListener("change", filterTasks);
+document.getElementById("categoryFilter").addEventListener("change", filterTasks);
+document.getElementById("sortBy").addEventListener("change", filterTasks);
+
+function filterTasks() {
+    const search = document.getElementById("searchInput").value.toLowerCase();
+    const priority = document.getElementById("priorityFilter").value;
+    const category = document.getElementById("categoryFilter").value;
+    const sort = document.getElementById("sortBy").value;
+    const selectedStatus = document.querySelector(".btn-group .active")?.innerText.toLowerCase() || "all";
+
+    let tasks = [...taskManager.tasks];
+
+    if (search) {
+        tasks = tasks.filter(task => task.name.toLowerCase().includes(search) || task.description.toLowerCase().includes(search));
+    }
+
+    if (priority) {
+        tasks = tasks.filter(task => task.priority === priority);
+    }
+
+    if (category) {
+        tasks = tasks.filter(task => task.category === category);
+    }
+
+    if (selectedStatus !== "all") {
+        tasks = tasks.filter(task => task.status === selectedStatus);
+    }
+
+    if (sort === "dueDate") {
+        tasks.sort((a, b) => new Date(a.duedate) - new Date(b.duedate));
+    } else if (sort === "priority") {
+        const priorityOrder = { low: 1, medium: 2, high: 3 };
+        tasks.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
+    } else if (sort === "name") {
+        tasks.sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    updateTaskList(tasks);
+    updateDashboard();
+}
+
+// Submit Task
+document.getElementById("taskForm").addEventListener("submit", function(e) {
     e.preventDefault();
     addTask();
 });
 
-// Load tasks when the page loads
-document.addEventListener("DOMContentLoaded", updateTaskList);
-
-
-
-// Pagination Setup
-function setupPagination(tasks) {
-    const pagination = document.getElementById("pagination");
-    pagination.innerHTML = "";
-    const totalPages = Math.ceil(tasks.length / tasksPerPage);
-
-    for (let i = 1; i <= totalPages; i++) {
-        const pageItem = document.createElement("button");
-        pageItem.classList.add("btn", "btn-outline-secondary", "me-2");
-        pageItem.innerText = i;
-        pageItem.onclick = () => {
-            currentPage = i;
-            filterTasks();
-        };
-        if (i === currentPage) {
-            pageItem.classList.add("active");
-        }
-        pagination.appendChild(pageItem);
-    }
-}
+// Initial Load
+document.addEventListener("DOMContentLoaded", filterTasks);

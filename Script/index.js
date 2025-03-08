@@ -36,7 +36,11 @@ function addTask() {
     const category = document.getElementById("category").value;
 
     if (!name || !duedate || !category) {
-        alert ("Task Name, Due Date, and Category are required");
+        Swal.fire({
+            icon: 'error',
+            title: 'Missing Information',
+            text: 'Task Name, Due Date, Priority, and Category are required'
+        });
         return;
     }
 
@@ -60,6 +64,7 @@ function addTask() {
             priority,
             category,
             status: "pending",
+            // createdAt: new Date().toISOString()
         };
         // Add the new task to the task list
         taskManager.tasks.push(newTask);
@@ -73,6 +78,14 @@ function addTask() {
     // Close modal
     let modal = bootstrap.Modal.getInstance(document.getElementById("addTaskModal"));
     modal.hide();
+
+    //Show sucess message
+    Swal.fire({
+        icon: 'success',
+        title: taskId ? 'Task Updated' : 'Task Added',
+        showConfirmationButton: false,
+        timer: 1500
+    });
 }
 
 // Function to update task list in the UI
@@ -83,6 +96,11 @@ function updateTaskList(tasks = taskManager.tasks) {
     tasks.forEach((task) => {
         const taskItem = document.createElement("li");
         taskItem.classList.add("list-group-item");
+
+        // strict through completed task
+        if (task.status === "completed") {
+            taskItem.classList.add("bg-light", "text-muted");
+        }
 
         taskItem.innerHTML = `
             <div class="d-flex justify-content-between align-items-center">
@@ -123,10 +141,12 @@ function toggleCompletion(taskId) {
 
 // Function to delete task
 function deleteTask(taskId) {
-    taskManager.tasks = taskManager.tasks.filter((task) => task.id !== taskId);
-    saveTasks();
-    filterTasks();
-    updateDashboard();
+    if(confirm ("Are you sure you want to delete tthis task?")) {
+        taskManager.tasks = taskManager.tasks.filter((task) => task.id !== taskId);
+        saveTasks();
+        filterTasks();
+        updateDashboard();
+    }
 }
 
 // Function to edit task
@@ -209,7 +229,10 @@ function filterTasks() {
     let tasks = [...taskManager.tasks];
 
     if (search) {
-        tasks = tasks.filter(task => task.name.toLowerCase().includes(search) || task.description.toLowerCase().includes(search));
+        tasks = tasks.filter(task => 
+            task.name.toLowerCase().includes(search) || 
+            task.description.toLowerCase().includes(search)
+        );
     }
 
     if (priority) {
@@ -217,24 +240,27 @@ function filterTasks() {
     }
 
     if (category) {
-        tasks = tasks.filter(task => task.category === category);
+        tasks = tasks.filter(task =>
+             task.category.toLowerCase() === category.toLowerCase());
     }
 
     if (selectedStatus !== "all") {
-        tasks = tasks.filter(task => task.status === selectedStatus);
+        if (selectedStatus === "pending" || selectedStatus === "completed") {
+            tasks = tasks.filter(task => task.status === selectedStatus);
+        }
     }
 
     if (sort === "dueDate") {
         tasks.sort((a, b) => new Date(a.duedate) - new Date(b.duedate));
     } else if (sort === "priority") {
         const priorityOrder = { low: 1, medium: 2, high: 3 };
-        tasks.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
+        tasks.sort((a, b) => priorityOrder[b.priority] - priorityOrder[a.priority]);
     } else if (sort === "name") {
         tasks.sort((a, b) => a.name.localeCompare(b.name));
     }
 
     updateTaskList(tasks);
-    updateDashboard();
+    // updateDashboard();
 }
 
 // Submit Task
