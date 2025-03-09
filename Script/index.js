@@ -16,6 +16,7 @@ document.querySelectorAll(".nav-link").forEach(link => {
     });
 });
 
+
 // Task manager object to store tasks
 const taskManager = {
     tasks: JSON.parse(localStorage.getItem("tasks")) || []
@@ -83,7 +84,7 @@ function addTask() {
     Swal.fire({
         icon: 'success',
         title: taskId ? 'Task Updated' : 'Task Added',
-        showConfirmationButton: false,
+        showConfirmButton: false,
         timer: 1500
     });
 }
@@ -141,7 +142,7 @@ function toggleCompletion(taskId) {
 
 // Function to delete task
 function deleteTask(taskId) {
-    if(confirm ("Are you sure you want to delete tthis task?")) {
+    if(confirm ("Are you sure you want to delete this task?")) {
         taskManager.tasks = taskManager.tasks.filter((task) => task.id !== taskId);
         saveTasks();
         filterTasks();
@@ -271,3 +272,5 @@ document.getElementById("taskForm").addEventListener("submit", function(e) {
 
 // Initial Load
 document.addEventListener("DOMContentLoaded", filterTasks);
+
+
