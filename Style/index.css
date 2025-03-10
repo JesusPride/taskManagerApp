@@ -6,6 +6,7 @@
 
 .body{
     background-color: rgb(252, 252, 252);
+    /* height: 100%; */
 }
 
 .m{
@@ -35,6 +36,11 @@
     justify-content: center;
     margin: 0 auto;
     align-self: center;
+}
+
+.content-section{
+    /* height: 100%; */
+    /* background-color: red; */
 }
 
 .nav-item {
@@ -68,3 +74,51 @@
     color: white !important;
   }
   
+.bg-color{
+    /* background-color: #0d6efd; */
+    /* border: 2px solid red; */
+}
+
+.chart-container {
+    width: 100%;
+    max-width: 400px;
+    height: 300px; 
+    margin: auto; 
+}
+
+.pie {
+    min-height: 500px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.pagination {
+    /* border: 1px solid red; */
+    margin: 0 auto;
+}
+
+.completed-task strong{
+    text-decoration: line-through !important;
+    color: gray;
+}
+
+.completed-task {
+    /* opacity: 0.5; */
+}
+
+/* .top > p {
+    width: 30%;
+} */
+
+.priority-low {
+    background-color: green; /* Green */
+}
+
+.priority-medium {
+    background-color: orange; /* Yellow */
+}
+
+.priority-high {
+    background-color: rgb(244, 64, 64); /* Orange */
+}
