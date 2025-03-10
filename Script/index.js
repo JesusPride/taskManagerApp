@@ -10,9 +10,9 @@ function showSection(sectionId) {
 
 // Event listener to add "active" class to the clicked navigation link
 document.querySelectorAll(".nav-link").forEach(link => {
-    link.addEventListener("click", function() {
+    link.addEventListener("click", function(event) {
         document.querySelectorAll(".nav-link").forEach(el => el.classList.remove("active"));
-        this.classList.add("active");
+        event.currentTarget.classList.add("active");
     });
 });
 
@@ -45,9 +45,10 @@ function addTask() {
         return;
     }
 
+    
     if (taskId) {
         // Update existing task
-        const task = taskManager.tasks.find(task => task.id == taskId);
+        const task = taskManager.tasks.find(task => task.id === taskId);
         if (task) {
             task.name = name;
             task.description = description;
@@ -73,6 +74,7 @@ function addTask() {
 
     saveTasks();
     filterTasks();
+    updateTaskList()
     updateDashboard();
     document.getElementById("taskForm").reset();
 
@@ -175,7 +177,15 @@ function updateDashboard(){
     document.getElementById("pendingTasksCount").innerText = pending;
     document.getElementById("completedTasksCount").innerText = completed;
 
+    // Count tasks by category
+    const work = taskManager.tasks.filter(task => task.category.toLowerCase() === "work").length;
+    const personal = taskManager.tasks.filter(task => task.category.toLowerCase() === "personal").length;
+    const shopping = taskManager.tasks.filter(task => task.category.toLowerCase() === "shopping").length;
+
+
+
     updatePieChart(pending, completed);
+    updateDonutChart(work, personal, shopping);
 }
 
 // Initialize Pie Chart
@@ -194,6 +204,32 @@ function updatePieChart(pending, completed) {
                 backgroundColor: ["#FFC107", "#28A745"],
             }],
         },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+        }
+    });
+}
+
+let donutChart;
+function updateDonutChart(work, personal, shoping) {
+    const ctx = document.getElementById("categoryDonutChart").getContext("2d");
+    if (donutChart) {
+        donutChart.destroy();
+    }
+    donutChart = new Chart(ctx, {
+        type: "doughnut",
+        data: {
+            labels: ["Work", "Personal", "Shoping"],
+            datasets: [{
+                data: [work, personal, shoping],
+                backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+            }],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+        }
     });
 }
 

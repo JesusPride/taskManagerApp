@@ -73,3 +73,17 @@
     /* border: 2px solid red; */
 }
 
+.chart-container {
+    width: 100%;
+    max-width: 400px;
+    height: 300px; 
+    margin: auto; 
+}
+
+.pie {
+    min-height: 500px; /* Adjust height as needed */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+

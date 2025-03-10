@@ -19,9 +19,6 @@
     />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-
-
   </head>
   <body class="m">
     <!-- This is for mobile view only ! -->
@@ -67,8 +64,16 @@
           class="col-md-3 col-lg-2 sidebar d-flex flex-column p-3 d-none d-lg-block"
         >
           <h5 class="text-center">Menu</h5>
-          <a class="nav-link active" href="#" onclick="showSection('dashboard')"><span class="material-symbols-outlined success wo"> grid_view </span>Dashboard</a>
-          <a class="nav-link" href="#" onclick="showSection('tasks')"><span class="material-symbols-outlined success wo"> grid_view </span>My Tasks</a>
+          <a class="nav-link active" href="#" onclick="showSection('dashboard')"
+            ><span class="material-symbols-outlined success wo">
+              grid_view </span
+            >Dashboard</a
+          >
+          <a class="nav-link" href="#" onclick="showSection('tasks')"
+            ><span class="material-symbols-outlined success wo">
+              grid_view </span
+            >My Tasks</a
+          >
         </aside>
 
         <!-- Main Content -->
@@ -83,47 +88,74 @@
               <div class="row g-3 m-2">
                 <div class="col-md-4">
                   <div class="card p-3">
-                    <h5 class="card-title">Total Tasks</h5>
-                    <p id="totalTasksCount">0</p>
+                    <div class="d-flex align-items-center">
+                      <img
+                        src="/Images/icon.png"
+                        alt="Total Tasks Icon"
+                        style="width: 40px; height: 40px; margin-right: 10px"
+                      />
+                      <div>
+                        <p class="card-title mb-0">Total Tasks</p>
+                        <h2 id="totalTasksCount" class="mb-0">0</h2>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="card p-3">
-                    <h5 class="card-title">Completed Tasks</h5>
-                    <p id="completedTasksCount">0</p>
+                    <div class="d-flex align-items-center">
+                      <img
+                        src="/Images/icon.png"
+                        alt="Completed Tasks Icon"
+                        style="width: 40px; height: 40px; margin-right: 10px"
+                      />
+                      <div
+                        class="justify-content-right"
+
+                      >
+                        <p class="card-title mb-0">Completed Tasks</p>
+                        <h2 id="completedTasksCount" class="mb-0">0</h2>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-4">
                   <div class="card p-3">
-                    <h5 class="card-title">Pending Tasks</h5>
-                    <p id="pendingTasksCount">0</p>
+                    <div class="d-flex align-items-center">
+                      <img
+                        src="/Images/icon.png"
+                        alt="Pending Tasks Icon"
+                        style="width: 40px; height: 40px; margin-right: 10px"
+                      />
+                      <div>
+                        <p class="card-title mb-0">Pending Tasks</p>
+                        <p id="pendingTasksCount" class="mb-0">0</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
             <div class="row mt-5">
-              <div class="col-md-6">
-                  <div class="card mb-4">
-                      <div class="card-header">
-                          Completion Distribution
-                      </div>
-                      <div class="card-body">
+              <div class="col-12 col-md-6">
+                  <div class="card mb-4 pie">
+                      <div class="card-header">Completion Distribution</div>
+                      <div class="card-body d-flex justify-content-center align-items-center">
                           <canvas id="taskPieChart"></canvas>
                       </div>
                   </div>
               </div>
-              <div class="col-md-6">
-                  <div class="card mb-4">
-                      <div class="card-header">
-                          Category Distribution
-                      </div>
-                      <div class="card-body">
+              <div class="col-12 col-md-6">
+                  <div class="card mb-4 pie">
+                      <div class="card-header">Category Distribution</div>
+                      <div class="card-body d-flex justify-content-center align-items-center">
                           <canvas id="categoryDonutChart"></canvas>
                       </div>
                   </div>
               </div>
           </div>
+          
 
           </div>
 
@@ -165,7 +197,7 @@
                   </div>
                   <div class="modal-body">
                     <form id="taskForm">
-                      <input type="hidden" id="taskId">
+                      <input type="hidden" id="taskId" />
                       <div class="mb-3">
                         <label for="taskName" class="form-label"
                           >Task Name</label
@@ -222,82 +254,82 @@
               </div>
             </div>
 
-          <!-- Task List -->
-          <div class="row">
-            <div class="col-md-8 offset-md-2 me">
-              <div class="card">
-                <div class="card-header">
-                  <div class="row">
-                    <div class="col-md-6">
-                      <h5>Your Tasks</h5>
+            <!-- Task List -->
+            <div class="row">
+              <div class="col-md-8 offset-md-2 me">
+                <div class="card">
+                  <div class="card-header">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <h5>Your Tasks</h5>
+                      </div>
+                      <div class="col-md-6 text-end">
+                        <div class="btn-group" role="group">
+                          <button
+                            id="filterAll"
+                            class="btn btn-sm btn-outline-secondary"
+                          >
+                            All
+                          </button>
+                          <button
+                            id="filterPending"
+                            class="btn btn-sm btn-outline-secondary"
+                          >
+                            Pending
+                          </button>
+                          <button
+                            id="filterCompleted"
+                            class="btn btn-sm btn-outline-secondary"
+                          >
+                            Completed
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                    <div class="col-md-6 text-end">
-                      <div class="btn-group" role="group">
-                        <button
-                          id="filterAll"
-                          class="btn btn-sm btn-outline-secondary"
-                        >
-                          All
-                        </button>
-                        <button
-                          id="filterPending"
-                          class="btn btn-sm btn-outline-secondary"
-                        >
-                          Pending
-                        </button>
-                        <button
-                          id="filterCompleted"
-                          class="btn btn-sm btn-outline-secondary"
-                        >
-                          Completed
-                        </button>
+
+                    <!-- This is Filter Section/Search-->
+                    <div class="row mb-3 d-flex">
+                      <div class="col-md-4">
+                        <input
+                          type="text"
+                          id="searchInput"
+                          class="form-control"
+                          placeholder="Search tasks..."
+                        />
+                      </div>
+                      <div class="col-md-2">
+                        <select id="priorityFilter" class="form-select">
+                          <option value="">All Priorities</option>
+                          <option value="low">Low</option>
+                          <option value="medium">Medium</option>
+                          <option value="high">High</option>
+                        </select>
+                      </div>
+                      <div class="col-md-2">
+                        <select id="categoryFilter" class="form-select">
+                          <option value="">All Categories</option>
+                          <option value="Work">Work</option>
+                          <option value="Personal">Personal</option>
+                          <option value="Shopping">Shopping</option>
+                        </select>
+                      </div>
+                      <div class="col-md-2 align-items-center gap-2">
+                        <select id="sortBy" class="form-select">
+                          <option value="">Sort By</option>
+                          <option value="dueDate">Due Date</option>
+                          <option value="priority">Priority</option>
+                          <option value="name">Name</option>
+                        </select>
                       </div>
                     </div>
                   </div>
 
-                    <!-- This is Filter Section/Search-->
-                <div class="row mb-3 d-flex">
-                  <div class="col-md-4">
-                    <input
-                      type="text"
-                      id="searchInput"
-                      class="form-control"
-                      placeholder="Search tasks..."
-                    />
-                  </div>
-                  <div class="col-md-2">
-                    <select id="priorityFilter" class="form-select">
-                      <option value="">All Priorities</option>
-                      <option value="low">Low</option>
-                      <option value="medium">Medium</option>
-                      <option value="high">High</option>
-                    </select>
-                  </div>
-                  <div class="col-md-2">
-                    <select id="categoryFilter" class="form-select">
-                      <option value="">All Categories</option>
-                      <option value="Work">Work</option>
-                      <option value="Personal">Personal</option>
-                      <option value="Shopping">Shopping</option>
-                    </select>
-                  </div>
-                  <div class="col-md-2 align-items-center gap-2">
-                    <select id="sortBy" class="form-select">
-                      <option value="">Sort By</option>
-                      <option value="dueDate">Due Date</option>
-                      <option value="priority">Priority</option>
-                      <option value="name">Name</option>
-                    </select>
-                  </div>
+                  <ul id="taskList" class="list-group list-group-flush">
+                    <!-- Tasks will be dynamically added here -->
+                  </ul>
                 </div>
-                </div>
-
-                <ul id="taskList" class="list-group list-group-flush">
-                  <!-- Tasks will be dynamically added here -->
-                </ul>
               </div>
             </div>
-          </div>
           </div>
         </main>
       </div>
