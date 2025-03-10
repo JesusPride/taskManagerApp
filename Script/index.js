@@ -106,14 +106,29 @@ function updateTaskList(tasks = taskManager.tasks) {
     const endIndex = startIndex + tasksPerPage;
     const paginatedTasks = tasks.slice(startIndex, endIndex);
 
-
     paginatedTasks.forEach((task) => {
         const taskItem = document.createElement("li");
         taskItem.classList.add("list-group-item");
-
-        // strict through completed task
-        if (task.status === "completed") {
+        
+          // strict through completed task
+          if (task.status === "completed") {
             taskItem.classList.add("completed-task","text-muted", "bg-light");
+        }
+
+        let priorityClass = "";
+        switch (task.priority) {
+            case "low":
+                priorityClass = "priority-low";
+                break;
+            case "medium":
+                priorityClass = "priority-medium";
+                break;
+            case "high":
+                priorityClass = "priority-high";
+                break;
+            default:
+                priorityClass = "";
+            
         }
 
         taskItem.innerHTML = `
@@ -123,13 +138,13 @@ function updateTaskList(tasks = taskManager.tasks) {
                      <p>${task.description}</p>
                 <div>
                     <span class="badge bg-info">${task.category}</span>
-                    <span class= "badge bg-warning">Priority: ${task.priority}</span> <br>
+                    <span class= "badge ${priorityClass}">Priority: ${task.priority}</span> <br>
                     <small>Due: ${task.dueDate}</small> 
                 </div>
                 </div>
                
               <div class="d-flex justify-content-end">
-                <button class="btn btn-sm btn-secondary me-2" onclick="editTask(${task.id})">Edit</button>
+                <button class="btn btn-sm btn-warning me-2" onclick="editTask(${task.id})">Edit</button>
                 <button class="btn btn-sm btn-danger me-2" onclick="deleteTask(${task.id})">Delete</button>
                 <button class="btn btn-sm btn-info" onclick="toggleCompletion(${task.id})">
                     ${task.status === "completed" ? "Undo" : "Completed"} 

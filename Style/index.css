@@ -110,3 +110,15 @@
 /* .top > p {
     width: 30%;
 } */
+
+.priority-low {
+    background-color: green; /* Green */
+}
+
+.priority-medium {
+    background-color: orange; /* Yellow */
+}
+
+.priority-high {
+    background-color: rgb(244, 64, 64); /* Orange */
+}
