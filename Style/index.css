@@ -124,8 +124,8 @@
 }
 
 .overdue-task {
-    background-color: #FFC080; 
-    color: #FF0000; 
+    /* background-color: #ffc080 !important;  */
+    color: #FF0000 !important; 
     font-weight: bold; 
-    border-left: red;
+    border-left: 3px solid red !important;
 }
