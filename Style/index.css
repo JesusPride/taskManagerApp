@@ -6,6 +6,7 @@
 
 .body{
     background-color: rgb(252, 252, 252);
+    /* height: 100%; */
 }
 
 .m{
@@ -35,6 +36,11 @@
     justify-content: center;
     margin: 0 auto;
     align-self: center;
+}
+
+.content-section{
+    /* height: 100%; */
+    /* background-color: red; */
 }
 
 .nav-item {
@@ -91,3 +97,16 @@
     /* border: 1px solid red; */
     margin: 0 auto;
 }
+
+.completed-task strong{
+    text-decoration: line-through !important;
+    color: gray;
+}
+
+.completed-task {
+    /* opacity: 0.5; */
+}
+
+/* .top > p {
+    width: 30%;
+} */

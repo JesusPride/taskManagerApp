@@ -113,12 +113,12 @@ function updateTaskList(tasks = taskManager.tasks) {
 
         // strict through completed task
         if (task.status === "completed") {
-            taskItem.classList.add("bg-light", "text-muted");
+            taskItem.classList.add("completed-task","text-muted", "bg-light");
         }
 
         taskItem.innerHTML = `
             <div class="d-flex justify-content-between align-items-center">
-                <div>
+                <div class = "top">
                      <strong>${task.name}</strong>
                      <p>${task.description}</p>
                 <div>
