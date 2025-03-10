@@ -122,3 +122,10 @@
 .priority-high {
     background-color: rgb(244, 64, 64); /* Orange */
 }
+
+.overdue-task {
+    background-color: #FFC080; 
+    color: #FF0000; 
+    font-weight: bold; 
+    border-left: red;
+}

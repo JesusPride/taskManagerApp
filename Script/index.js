@@ -102,6 +102,14 @@ function updateTaskList(tasks = taskManager.tasks) {
     const taskList = document.getElementById("taskList");
     taskList.innerHTML = "";
 
+    if (tasks.length === 0) {
+        const noTaskMessage = document.createElement("div");
+        noTaskMessage.classList.add("alert", "alert-info", "text-center")
+        noTaskMessage.textContent = "No tasks added. Please add a task.";
+        taskList.appendChild(noTaskMessage);
+        return;
+    }
+
     const startIndex = (currentPage - 1) * tasksPerPage;
     const endIndex = startIndex + tasksPerPage;
     const paginatedTasks = tasks.slice(startIndex, endIndex);
@@ -109,8 +117,15 @@ function updateTaskList(tasks = taskManager.tasks) {
     paginatedTasks.forEach((task) => {
         const taskItem = document.createElement("li");
         taskItem.classList.add("list-group-item");
+
+        //Check if the task is overdue
+        const dueDate = new Date(task.dueDate);
+        const today = new Date();
+        if (dueDate < today) {
+            taskItem.classList.add("overdue-task")
+        }
         
-          // strict through completed task
+          // strike through completed task
           if (task.status === "completed") {
             taskItem.classList.add("completed-task","text-muted", "bg-light");
         }
@@ -149,7 +164,7 @@ function updateTaskList(tasks = taskManager.tasks) {
                 <button class="btn btn-sm btn-info" onclick="toggleCompletion(${task.id})">
                     ${task.status === "completed" ? "Undo" : "Completed"} 
                 </button>
-            </div>
+             </div>
 
             </div>
         `;
