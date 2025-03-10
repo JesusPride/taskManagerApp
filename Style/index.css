@@ -81,9 +81,13 @@
 }
 
 .pie {
-    min-height: 500px; /* Adjust height as needed */
+    min-height: 500px; 
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
+.pagination {
+    /* border: 1px solid red; */
+    margin: 0 auto;
+}

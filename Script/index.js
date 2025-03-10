@@ -47,7 +47,6 @@ function addTask() {
         });
         return;
     }
-
     
     if (taskId) {
         // Update existing task
@@ -94,12 +93,21 @@ function addTask() {
     });
 }
 
+//Pagination variable
+let currentPage =1;
+const tasksPerPage = 5;
+
 // Function to update task list in the UI
 function updateTaskList(tasks = taskManager.tasks) {
     const taskList = document.getElementById("taskList");
     taskList.innerHTML = "";
 
-    tasks.forEach((task) => {
+    const startIndex = (currentPage - 1) * tasksPerPage;
+    const endIndex = startIndex + tasksPerPage;
+    const paginatedTasks = tasks.slice(startIndex, endIndex);
+
+
+    paginatedTasks.forEach((task) => {
         const taskItem = document.createElement("li");
         taskItem.classList.add("list-group-item");
 
@@ -132,7 +140,77 @@ function updateTaskList(tasks = taskManager.tasks) {
         `;
         taskList.appendChild(taskItem);
     });
+
+    updatePaginationControls(tasks.length);
 }
+
+function updatePaginationControls(totalTasks) {
+    const paginationContainer = document.getElementById("pagination");
+    paginationContainer.innerHTML = "";
+
+    const totalPages = Math.ceil(totalTasks / tasksPerPage);
+
+    if (totalPages <= 1) return;
+
+    const paginationList = document.createElement("ul");
+    paginationList.className = "pagination justify-content-center";
+
+    const createPageItem = (pageNumber, isActive) => {
+        const pageItem = document.createElement("li");
+        pageItem.className = "page-item" + (isActive ? " active" : "");
+        const pageLink = document.createElement("a");
+        pageLink.className = "page-link";
+        pageLink.href = "#";
+        pageLink.innerText = pageNumber;
+        pageLink.addEventListener("click", () => {
+            currentPage = pageNumber;
+            filterTasks();
+        });
+        pageItem.appendChild(pageLink);
+        return pageItem;
+    };
+
+    // Previous button
+    const prevItem = document.createElement("li");
+    prevItem.className = "page-item" + (currentPage === 1 ? " disabled" : "");
+    const prevLink = document.createElement("a");
+    prevLink.className = "page-link";
+    prevLink.href = "#";
+    prevLink.innerText = "Previous";
+    prevLink.addEventListener("click", () => {
+        if (currentPage > 1) {
+            currentPage--;
+            filterTasks();
+        }
+    });
+    prevItem.appendChild(prevLink);
+    paginationList.appendChild(prevItem);
+
+    // Page numbers
+    for (let i = 1; i <= totalPages; i++) {
+        const pageItem = createPageItem(i, i === currentPage);
+        paginationList.appendChild(pageItem);
+    }
+
+    // Next button
+    const nextItem = document.createElement("li");
+    nextItem.className = "page-item" + (currentPage === totalPages ? " disabled" : "");
+    const nextLink = document.createElement("a");
+    nextLink.className = "page-link";
+    nextLink.href = "#";
+    nextLink.innerText = "Next";
+    nextLink.addEventListener("click", () => {
+        if (currentPage < totalPages) {
+            currentPage++;
+            filterTasks();
+        }
+    });
+    nextItem.appendChild(nextLink);
+    paginationList.appendChild(nextItem);
+
+    paginationContainer.appendChild(paginationList);
+}
+
 
 // Function to toggle completion status
 function toggleCompletion(taskId) {
