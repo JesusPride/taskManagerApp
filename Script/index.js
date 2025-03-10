@@ -29,14 +29,17 @@ function saveTasks() {
 
 // Function to add task and update existing one
 function addTask() {
+    document.querySelector("[data-bs-toggle='modal']").addEventListener("click", function() {
+        document.getElementById("taskId").value = "";
+    });
     const taskId = document.getElementById("taskId").value;
     const name = document.getElementById("taskName").value.trim();
     const description = document.getElementById("taskDescription").value.trim();
-    const duedate = document.getElementById("dueDate").value;
+    const dueDate = document.getElementById("dueDate").value;
     const priority = document.getElementById("priority").value;
     const category = document.getElementById("category").value;
 
-    if (!name || !duedate || !category) {
+    if (!name || !dueDate || !category) {
         Swal.fire({
             icon: 'error',
             title: 'Missing Information',
@@ -48,11 +51,11 @@ function addTask() {
     
     if (taskId) {
         // Update existing task
-        const task = taskManager.tasks.find(task => task.id === taskId);
+        const task = taskManager.tasks.find(task => task.id === parseInt(taskId));
         if (task) {
             task.name = name;
             task.description = description;
-            task.duedate = duedate;
+            task.dueDate = dueDate;
             task.priority = priority;
             task.category = category;
         }
@@ -62,7 +65,7 @@ function addTask() {
             id: Date.now(),
             name,
             description,
-            duedate,
+            dueDate,
             priority,
             category,
             status: "pending",
@@ -113,7 +116,7 @@ function updateTaskList(tasks = taskManager.tasks) {
                 <div>
                     <span class="badge bg-info">${task.category}</span>
                     <span class= "badge bg-warning">Priority: ${task.priority}</span> <br>
-                    <small>Due: ${task.duedate}</small> 
+                    <small>Due: ${task.dueDate}</small> 
                 </div>
                 </div>
                
@@ -160,12 +163,16 @@ function editTask(taskId) {
     document.getElementById("taskId").value = task.id;
     document.getElementById("taskName").value = task.name;
     document.getElementById("taskDescription").value = task.description;
-    document.getElementById("dueDate").value = task.duedate;
+    document.getElementById("dueDate").value = task.dueDate;
     document.getElementById("priority").value = task.priority;
     document.getElementById("category").value = task.category;
 
     let modal = new bootstrap.Modal(document.getElementById("addTaskModal"));
     modal.show();
+    document.getElementById("taskForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        updateTask();
+    });
 }
 
 function updateDashboard(){
@@ -288,7 +295,7 @@ function filterTasks() {
     }
 
     if (sort === "dueDate") {
-        tasks.sort((a, b) => new Date(a.duedate) - new Date(b.duedate));
+        tasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
     } else if (sort === "priority") {
         const priorityOrder = { low: 1, medium: 2, high: 3 };
         tasks.sort((a, b) => priorityOrder[b.priority] - priorityOrder[a.priority]);
