@@ -63,15 +63,15 @@
         <aside
           class="col-md-3 col-lg-2 sidebar d-flex flex-column p-3 d-none d-lg-block"
         >
-          <h5 class="text-center">Menu</h5>
+          <h5 class="text-left ps-2 menu">Menu</h5>
 
-          <a class="nav-link" href="#" onclick="showSection('tasks')"
+          <a class="nav-link active" href="#" onclick="showSection('tasks')"
             ><span class="material-symbols-outlined success wo">
               grid_view </span
             >My Tasks</a
           >
 
-          <a class="nav-link active" href="#" onclick="showSection('dashboard')"
+          <a class="nav-link" href="#" onclick="showSection('dashboard')"
             ><span class="material-symbols-outlined success wo">
               grid_view </span
             >Dashboard</a
@@ -81,7 +81,7 @@
 
         <!-- Main Content -->
         <main class="col-md-9 col-lg-10 p-4">
-          <div id="dashboard" class="content-section">
+          <div id="dashboard" class="content-section d-none">
             <h2>Dashboard</h2>
             <p>Welcome to your task analytics.</p>
 
@@ -162,7 +162,7 @@
 
           </div>
 
-          <div id="tasks" class="content-section d-none">
+          <div id="tasks" class="content-section">
             <h2>My Tasks</h2>
             <p>Here are your pending and completed tasks.</p>
 
@@ -224,7 +224,7 @@
                       </div>
                       <div class="mb-3">
                         <label for="dueDate" class="form-label">Due Date</label>
-                        <input type="date" class="form-control" id="dueDate" />
+                        <input type="date" class="form-control" id="dueDate" min="2025-03-11"/>
                       </div>
                       <div class="mb-3">
                         <label for="priority" class="form-label"
@@ -340,9 +340,6 @@
       </div>
     </div>
 
-    <div class="alert alert-info">
-      No Added tasks yet, Please Click on the Add Task button above to get started
-    </div>
     <script src="/Script/index.js"></script>
   </body>
 </html>

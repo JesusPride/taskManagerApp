@@ -108,6 +108,7 @@ function updateTaskList(tasks = taskManager.tasks) {
         noTaskMessage.textContent = "No tasks added. Please add a task.";
         taskList.appendChild(noTaskMessage);
         return;
+        
     }
 
     const startIndex = (currentPage - 1) * tasksPerPage;
@@ -147,7 +148,7 @@ function updateTaskList(tasks = taskManager.tasks) {
         }
 
         taskItem.innerHTML = `
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="d-lg-flex justify-content-between align-items-center">
                 <div class = "top">
                      <strong>${task.name}</strong>
                      <p>${task.description}</p>
@@ -158,7 +159,7 @@ function updateTaskList(tasks = taskManager.tasks) {
                 </div>
                 </div>
                
-              <div class="d-flex justify-content-end">
+              <div class="d-flex buttons  justify-content-lg-end">
                 <button class="btn btn-sm btn-warning me-2" onclick="editTask(${task.id})">Edit</button>
                 <button class="btn btn-sm btn-danger me-2" onclick="deleteTask(${task.id})">Delete</button>
                 <button class="btn btn-sm btn-info" onclick="toggleCompletion(${task.id})">
