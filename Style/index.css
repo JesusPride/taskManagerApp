@@ -37,20 +37,12 @@
 }
 
 .icon{
-    border: 1px solid red;
+    /* border: 1px solid red; */
     align-items: center;
     justify-content: center;
     margin: 0 auto;
     align-self: center;
 }
-
-
-
-.nav-item {
-    border: 2px solid red;
-}
-
-
 
 .nav-link.active {
     background-color: rgb(225, 225, 237);

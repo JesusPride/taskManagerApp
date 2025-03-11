@@ -121,7 +121,7 @@ function updateTaskList(tasks = taskManager.tasks) {
 
         //Check if the task is overdue
         const dueDate = new Date(task.dueDate);
-        const today = new Date();
+        const today = new Date().now;
         if (dueDate < today) {
             taskItem.classList.add("overdue-task")
         }
