@@ -6,7 +6,6 @@
 
 .body{
     background-color: rgb(252, 252, 252);
-    /* height: 100%; */
 }
 
 .m{
@@ -22,10 +21,17 @@
 .sidebar a {
     color: black;
     text-decoration: none;
-    display: block;
+    display: flex;
+    justify-content: left;
     padding: 10px;
     border-radius: 5px;
 }
+
+.sidebar a span.material-symbols-outlined {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
 .sidebar a:hover {
     background-color: rgba(0, 0, 255, 0.063);
 }
@@ -38,10 +44,7 @@
     align-self: center;
 }
 
-.content-section{
-    /* height: 100%; */
-    /* background-color: red; */
-}
+
 
 .nav-item {
     border: 2px solid red;
@@ -65,7 +68,6 @@
 
 .me {
     width: 100%  !important;
-    /* border: 2px solid green; */
     margin: 0 !important;
 }
 
@@ -74,10 +76,6 @@
     color: white !important;
   }
   
-.bg-color{
-    /* background-color: #0d6efd; */
-    /* border: 2px solid red; */
-}
 
 .chart-container {
     width: 100%;
@@ -94,7 +92,6 @@
 }
 
 .pagination {
-    /* border: 1px solid red; */
     margin: 0 auto;
 }
 
@@ -103,22 +100,22 @@
     color: gray;
 }
 
-.completed-task {
-    /* opacity: 0.5; */
-}
-
-/* .top > p {
-    width: 30%;
-} */
 
 .priority-low {
-    background-color: green; /* Green */
+    background-color: green; 
 }
 
 .priority-medium {
-    background-color: orange; /* Yellow */
+    background-color: orange; 
 }
 
 .priority-high {
-    background-color: rgb(244, 64, 64); /* Orange */
+    background-color: rgb(244, 64, 64); 
+}
+
+.overdue-task {
+    /* background-color: #ffc080 !important;  */
+    color: #FF0000 !important; 
+    font-weight: bold; 
+    border-left: 3px solid red !important;
 }
