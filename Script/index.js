@@ -158,8 +158,7 @@ function updateTaskList(tasks = taskManager.tasks) {
         taskItem.innerHTML = `
             <div class="d-lg-flex justify-content-between align-items-center">
                 <div class = "top">
-
-                <input type="checkbox" id="check"/>
+                    <input type="checkbox" ${task.status === "completed" ? "checked" : ""} onchange="toggleCompletion(${task.id})"/>
                      <strong>${task.name}</strong>
                      <p>${task.description}</p>
                 <div>
