@@ -52,6 +52,11 @@
                 >My Task</a
               >
             </li>
+            <li class="nav-item">
+              <a class="nav-link" onclick="showSection('logout')" href="/login.html"
+                >Log Out</a
+              >
+            </li>
           </ul>
         </div>
       </div>
@@ -70,12 +75,18 @@
               grid_view </span
             >My Tasks</a
           >
-
+         
           <a class="nav-link" href="#" onclick="showSection('dashboard')"
             ><span class="material-symbols-outlined success wo">
               grid_view </span
             >Dashboard</a
           >
+
+          <a class="nav-link" href="/login.html" onclick="showSection('logout')"
+          ><span class="material-symbols-outlined success wo">
+            grid_view </span
+          >Log Out</a
+        >
           
         </aside>
 
@@ -224,7 +235,7 @@
                       </div>
                       <div class="mb-3">
                         <label for="dueDate" class="form-label">Due Date</label>
-                        <input type="date" class="form-control" id="dueDate" min="2025-03-11"/>
+                        <input type="date" class="form-control" id="dueDate" min="2025-03-13"/>
                       </div>
                       <div class="mb-3">
                         <label for="priority" class="form-label"

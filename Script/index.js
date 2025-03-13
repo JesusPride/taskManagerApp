@@ -1,10 +1,10 @@
 // Function to show a selected section and hide others
 function showSection(sectionId) {
-    // Hide all sections
+ 
     document.querySelectorAll('.content-section').forEach(section => {
         section.classList.add('d-none');
     });
-    // Show the selected section
+  
     document.getElementById(sectionId).classList.remove('d-none');
 }
 
@@ -27,7 +27,7 @@ function saveTasks() {
     localStorage.setItem("tasks", JSON.stringify(taskManager.tasks));
 }
 
-// Function to add task and update existing one
+
 function addTask() {
     document.querySelector("[data-bs-toggle='modal']").addEventListener("click", function() {
         document.getElementById("taskId").value = "";
@@ -39,7 +39,7 @@ function addTask() {
     const priority = document.getElementById("priority").value;
     const category = document.getElementById("category").value;
 
-    if (!name || !dueDate || !category) {
+    if (!name || !dueDate || !category || !priority) {
         Swal.fire({
             icon: 'error',
             title: 'Missing Information',
@@ -68,9 +68,8 @@ function addTask() {
             priority,
             category,
             status: "pending",
-            // createdAt: new Date().toISOString()
         };
-        // Add the new task to the task list
+       
         taskManager.tasks.push(newTask);
     }
 
@@ -80,11 +79,11 @@ function addTask() {
     updateDashboard();
     document.getElementById("taskForm").reset();
 
-    // Close modal
+
     let modal = bootstrap.Modal.getInstance(document.getElementById("addTaskModal"));
     modal.hide();
 
-    //Show sucess message
+    
     Swal.fire({
         icon: 'success',
         title: taskId ? 'Task Updated' : 'Task Added',
@@ -93,11 +92,11 @@ function addTask() {
     });
 }
 
-//Pagination variable
+
 let currentPage =1;
 const tasksPerPage = 5;
 
-// Function to update task list in the UI
+
 function updateTaskList(tasks = taskManager.tasks) {
     const taskList = document.getElementById("taskList");
     taskList.innerHTML = "";
@@ -119,37 +118,47 @@ function updateTaskList(tasks = taskManager.tasks) {
         const taskItem = document.createElement("li");
         taskItem.classList.add("list-group-item");
 
-        //Check if the task is overdue
+      
         const dueDate = new Date(task.dueDate);
-        const today = new Date().now;
-        if (dueDate < today) {
+        const today = new Date();
+        if (dueDate < today && task.status !== "completed") {
             taskItem.classList.add("overdue-task")
         }
         
-          // strike through completed task
+          
           if (task.status === "completed") {
             taskItem.classList.add("completed-task","text-muted", "bg-light");
         }
 
-        let priorityClass = "";
-        switch (task.priority) {
-            case "low":
-                priorityClass = "priority-low";
-                break;
-            case "medium":
-                priorityClass = "priority-medium";
-                break;
-            case "high":
-                priorityClass = "priority-high";
-                break;
-            default:
-                priorityClass = "";
+        // let priorityClass = "";
+        // switch (task.priority) {
+        //     case "low":
+        //         priorityClass = "priority-low";
+        //         break;
+        //     case "medium":
+        //         priorityClass = "priority-medium";
+        //         break;
+        //     case "high":
+        //         priorityClass = "priority-high";
+        //         break;
+        //     default:
+        //         priorityClass = "";
             
+        // }
+
+        let priorityClass = "";
+        if (task.priority === "low") {
+            priorityClass = "priority-low"
+        }else if  (task.priority === "medium") {
+            priorityClass = "priority-medium"
+        }else if(task.priority === "high") {
+            priorityClass = "priority-high"
         }
 
         taskItem.innerHTML = `
             <div class="d-lg-flex justify-content-between align-items-center">
                 <div class = "top">
+                    <input type="checkbox" ${task.status === "completed" ? "checked" : ""} onchange="toggleCompletion(${task.id})"/>
                      <strong>${task.name}</strong>
                      <p>${task.description}</p>
                 <div>
@@ -169,7 +178,7 @@ function updateTaskList(tasks = taskManager.tasks) {
 
             </div>
         `;
-        taskList.appendChild(taskItem);
+        taskList.prepend(taskItem);
     });
 
     updatePaginationControls(tasks.length);
@@ -243,18 +252,22 @@ function updatePaginationControls(totalTasks) {
 }
 
 
-// Function to toggle completion status
+
 function toggleCompletion(taskId) {
+
+    // const checkbox = document.getElementById("check");
     const task = taskManager.tasks.find(task => task.id === taskId);
     if (!task) return;
 
     task.status = task.status === "completed" ? "pending" : "completed";
+    // checkbox.checked = task.status === "completed",
     saveTasks();
     filterTasks();
     updateDashboard();
 }
 
-// Function to delete task
+
+
 function deleteTask(taskId) {
     if(confirm ("Are you sure you want to delete this task?")) {
         taskManager.tasks = taskManager.tasks.filter((task) => task.id !== taskId);
@@ -264,7 +277,7 @@ function deleteTask(taskId) {
     }
 }
 
-// Function to edit task
+
 function editTask(taskId) {
     const task = taskManager.tasks.find((task) => task.id === taskId);
     if (!task) return;
@@ -304,7 +317,7 @@ function updateDashboard(){
     updateDonutChart(work, personal, shopping);
 }
 
-// Initialize Pie Chart
+
 let pieChart;
 function updatePieChart(pending, completed) {
     const ctx = document.getElementById("taskPieChart").getContext("2d");
@@ -416,13 +429,12 @@ function filterTasks() {
     // updateDashboard();
 }
 
-// Submit Task
 document.getElementById("taskForm").addEventListener("submit", function(e) {
     e.preventDefault();
     addTask();
 });
 
-// Initial Load
+
 document.addEventListener("DOMContentLoaded", filterTasks);
 
 
