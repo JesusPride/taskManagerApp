@@ -44,9 +44,14 @@ fullNameInput.addEventListener("input", validateFullName);
 emailAddressInput.addEventListener("input", validateEmailAddress);
 passwordInput.addEventListener("input", validatePassword);
 
-// Form submission event listener
+
 document.getElementById("registerForm").addEventListener("submit", function(event) {
     event.preventDefault();
+
+    validateFullName();
+    validateEmailAddress();
+    validatePassword();
+
     const fullName = fullNameInput.value.trim();
     const emailAddress = emailAddressInput.value.trim();
     const password = passwordInput.value.trim();
