@@ -120,8 +120,8 @@ function updateTaskList(tasks = taskManager.tasks) {
 
       
         const dueDate = new Date(task.dueDate);
-        const today = new Date().now;
-        if (dueDate < today) {
+        const today = new Date();
+        if (dueDate < today && task.status !== "completed") {
             taskItem.classList.add("overdue-task")
         }
         
@@ -178,7 +178,7 @@ function updateTaskList(tasks = taskManager.tasks) {
 
             </div>
         `;
-        taskList.appendChild(taskItem);
+        taskList.prepend(taskItem);
     });
 
     updatePaginationControls(tasks.length);
