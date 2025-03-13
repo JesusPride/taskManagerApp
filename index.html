@@ -1,356 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Task Manager</title>
-    <link rel="stylesheet" href="/Style/index.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    />
-    <script
-      defer
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-    ></script>
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=grid_view"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  </head>
-  <body class="m">
-    <!-- This is for mobile view only ! -->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary d-lg-none">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">Task Manager</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a
-                class="nav-link active"
-                onclick="showSection('dashboard')"
-                aria-current="page"
-                href="#"
-                >Dashboard</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" onclick="showSection('tasks')" href="#"
-                >My Task</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" onclick="showSection('logout')" href="/login.html"
-                >Log Out</a
-              >
-            </li>
-          </ul>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Form</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/Style/form.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <section class="w-100">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-xl-10">
+          <div class="card">
+            <div class="row g-0">
+              <div class="col-md-6 col-lg-5 d-none d-md-block login-image">
+                <img src="/Images/wmremove-transformed (3).jpeg"
+                  alt="login form" class="img-fluid" />
+              </div>
+              <div class="col-md-6 col-lg-7 d-flex align-items-center">
+                <div class="card-body p-4 p-lg-5 text-black">
+  
+                  <form id="loginForm">
+  
+                    <div class="d-flex align-items-center mb-3 pb-1">
+                      <h4 class="h1 fw-bold mb-0">Login</h4>
+                    </div>
+  
+                    <h6 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Access your tasks effortlessly—log in and stay organized!</h6>
+  
+                    <div class="form-outline mb-4">
+                      <input type="email" id="emailAddress" class="form-control form-control-lg" placeholder=" " />
+                      <label class="form-label" for="Email address">Email address</label>
+                    </div>
+  
+                    <div class="form-outline mb-4">
+                      <input type="password" id="password" class="form-control form-control-lg" placeholder=" " />
+                      <label class="form-label" for="Password">Password</label>
+                    </div>
+  
+                    <div class="pt-1 mb-4">
+                      <button class="btn btn-lg btn-dark" type="submit">Login</button>
+                    </div>
+  
+                    <a class="small text-muted" href="#!">Forgot password?</a>
+                    <p class="mb-5 pb-lg-2" style="color: #0d6efd;">Don't have an account? <a href="/register.html"
+                        style="color: #0d6efd;">Register here</a></p>
+                    <div class="mt-3">
+                      <a href="#!" class="small text-muted me-2">Terms of use.</a>
+                      <a href="#!" class="small text-muted">Privacy policy</a>
+                    </div>
+                  </form>
+  
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </nav>
-
-    <div class="container-fluid">
-      <div class="row">
-        <!-- Sidebar -->
-        <aside
-          class="col-md-3 col-lg-2 sidebar d-flex flex-column p-3 d-none d-lg-block"
-        >
-          <h5 class="text-left ps-2 menu">Menu</h5>
-
-          <a class="nav-link active" href="#" onclick="showSection('tasks')"
-            ><span class="material-symbols-outlined success wo">
-              grid_view </span
-            >My Tasks</a
-          >
-         
-          <a class="nav-link" href="#" onclick="showSection('dashboard')"
-            ><span class="material-symbols-outlined success wo">
-              grid_view </span
-            >Dashboard</a
-          >
-
-          <a class="nav-link" href="/login.html" onclick="showSection('logout')"
-          ><span class="material-symbols-outlined success wo">
-            grid_view </span
-          >Log Out</a
-        >
-          
-        </aside>
-
-        <!-- Main Content -->
-        <main class="col-md-9 col-lg-10 p-4">
-          <div id="dashboard" class="content-section d-none">
-            <h2>Dashboard</h2>
-            <p>Welcome to your task analytics.</p>
-
-            <div class="container mt-4 p-3 overview">
-              <h5>Task Overview</h5>
-
-              <div class="row g-3 m-2">
-                <div class="col-md-4">
-                  <div class="card p-3">
-                    <div class="d-flex align-items-center">
-                      <img
-                        src="/Images/icon.png"
-                        alt="Total Tasks Icon"
-                        style="width: 40px; height: 40px; margin-right: 10px"
-                      />
-                      <div>
-                        <p class="card-title mb-0">Total Tasks</p>
-                        <h2 id="totalTasksCount" class="mb-0">0</h2>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="card p-3">
-                    <div class="d-flex align-items-center">
-                      <img
-                        src="/Images/icon.png"
-                        alt="Completed Tasks Icon"
-                        style="width: 40px; height: 40px; margin-right: 10px"
-                      />
-                      <div
-                        class="justify-content-right"
-
-                      >
-                        <p class="card-title mb-0">Completed Tasks</p>
-                        <h2 id="completedTasksCount" class="mb-0">0</h2>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="card p-3">
-                    <div class="d-flex align-items-center">
-                      <img
-                        src="/Images/icon.png"
-                        alt="Pending Tasks Icon"
-                        style="width: 40px; height: 40px; margin-right: 10px"
-                      />
-                      <div>
-                        <p class="card-title mb-0">Pending Tasks</p>
-                        <h2 id="pendingTasksCount" class="mb-0">0</h2>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="row mt-5">
-              <div class="col-12 col-md-6">
-                  <div class="card mb-4 pie">
-                      <div class="card-header">Completion Distribution</div>
-                      <div class="card-body d-flex justify-content-center align-items-center">
-                          <canvas id="taskPieChart"></canvas>
-                      </div>
-                  </div>
-              </div>
-              <div class="col-12 col-md-6">
-                  <div class="card mb-4 pie">
-                      <div class="card-header">Category Distribution</div>
-                      <div class="card-body d-flex justify-content-center align-items-center">
-                          <canvas id="categoryDonutChart"></canvas>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          
-
-          </div>
-
-          <div id="tasks" class="content-section">
-            <h2>My Tasks</h2>
-            <p>Here are your pending and completed tasks.</p>
-
-            <div class="d-flex justify-content-end mb-3">
-              <button
-                type="submit"
-                class="btn btn-primary"
-                data-bs-toggle="modal"
-                data-bs-target="#addTaskModal"
-              >
-                Add Task
-              </button>
-            </div>
-
-            <!-- Add Task Modal -->
-            <div
-              class="modal fade"
-              id="addTaskModal"
-              tabindex="-1"
-              aria-labelledby="addTaskModalLabel"
-              aria-hidden="true"
-            >
-              <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="addTaskModalLabel">
-                      Add New Task
-                    </h5>
-                    <button
-                      type="button"
-                      class="btn-close"
-                      data-bs-dismiss="modal"
-                      aria-label="Close"
-                    ></button>
-                  </div>
-                  <div class="modal-body">
-                    <form id="taskForm">
-                      <input type="hidden" id="taskId" />
-                      <div class="mb-3">
-                        <label for="taskName" class="form-label"
-                          >Task Name</label
-                        >
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="taskName"
-                          placeholder="Enter Task Name"
-                        />
-                      </div>
-                      <div class="mb-3">
-                        <label for="taskDescription" class="form-label"
-                          >Task Description</label
-                        >
-                        <textarea
-                          class="form-control"
-                          id="taskDescription"
-                          placeholder="Describe the task"
-                        ></textarea>
-                      </div>
-                      <div class="mb-3">
-                        <label for="dueDate" class="form-label">Due Date</label>
-                        <input type="date" class="form-control" id="dueDate" min="2025-03-13"/>
-                      </div>
-                      <div class="mb-3">
-                        <label for="priority" class="form-label"
-                          >Priority</label
-                        >
-                        <select class="form-select" id="priority">
-                          <option value="">Select Priority</option>
-                          <option value="low">Low</option>
-                          <option value="medium">Medium</option>
-                          <option value="high">High</option>
-                        </select>
-                      </div>
-                      <div class="mb-3">
-                        <label for="category" class="form-label"
-                          >Category</label
-                        >
-                        <select class="form-select" id="category">
-                          <option value="">Select Category</option>
-                          <option value="Work">Work</option>
-                          <option value="Personal">Personal</option>
-                          <option value="Shopping">Shopping</option>
-                        </select>
-                      </div>
-                      <button type="submit" class="btn btn-primary w-100">
-                        Save Task
-                      </button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Task List -->
-            <div class="row">
-              <div class="col-md-8 offset-md-2 me">
-                <div class="card">
-                  <div class="card-header">
-                    <div class="row">
-                      <div class="col-md-6">
-                        <h5>Your Tasks</h5>
-                      </div>
-                      <div class="col-md-6 text-end">
-                        <div class="btn-group" role="group">
-                          <button
-                            id="filterAll"
-                            class="btn btn-sm btn-outline-secondary"
-                          >
-                            All
-                          </button>
-                          <button
-                            id="filterPending"
-                            class="btn btn-sm btn-outline-secondary"
-                          >
-                            Pending
-                          </button>
-                          <button
-                            id="filterCompleted"
-                            class="btn btn-sm btn-outline-secondary"
-                          >
-                            Completed
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- This is Filter Section/Search-->
-                    <div class="row mb-3 d-flex">
-                      <div class="col-md-4">
-                        <input
-                          type="text"
-                          id="searchInput"
-                          class="form-control"
-                          placeholder="Search tasks..."
-                        />
-                      </div>
-                      <div class="col-md-2">
-                        <select id="priorityFilter" class="form-select">
-                          <option value="">All Priorities</option>
-                          <option value="low">Low</option>
-                          <option value="medium">Medium</option>
-                          <option value="high">High</option>
-                        </select>
-                      </div>
-                      <div class="col-md-2">
-                        <select id="categoryFilter" class="form-select">
-                          <option value="">All Categories</option>
-                          <option value="Work">Work</option>
-                          <option value="Personal">Personal</option>
-                          <option value="Shopping">Shopping</option>
-                        </select>
-                      </div>
-                      <div class="col-md-2 align-items-center gap-2">
-                        <select id="sortBy" class="form-select">
-                          <option value="">Sort By</option>
-                          <option value="dueDate">Due Date</option>
-                          <option value="priority">Priority</option>
-                          <option value="name">Name</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-
-                  <ul id="taskList" class="list-group list-group-flush">
-                    <!-- Tasks will be dynamically added here -->
-                  </ul>
-                </div>
-
-                <div id="pagination" class="mt-2"></div>
-              </div>
-            </div>
-          </div>
-        </main>
-      </div>
     </div>
+  </section>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script>
 
-    <script src="/Script/index.js"></script>
-  </body>
+document.getElementById("loginForm").addEventListener("submit", function(event){
+    event.preventDefault();
+    let emailAddress = document.getElementById("emailAddress").value;
+    let password = document.getElementById("password").value;
+
+   
+    if (emailAddress === "" || password === "") {
+        Swal.fire({
+            toast: true,
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Please fill in all fields.',
+            timer: 3000,
+            showConfirmButton: false,
+            position: 'top-right'
+        });
+        return;
+    }
+
+    let user = localStorage.getItem(emailAddress);
+
+    if (user) {
+        try {
+            let parsedUser   = JSON.parse(user);
+            if (parsedUser .password === password) {
+                localStorage.setItem("user", JSON.stringify(parsedUser ));
+                Swal.fire({
+                  toast: true,
+                  position: 'top-right',
+                  icon: 'success',
+                  title: 'Logged in successfully',
+                  showConfirmButton: false
+                })
+                setTimeout(() => {
+                    window.location.href = "/Task.html";
+                }, 1000);
+            } else {
+                Swal.fire({
+                    toast: true,
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Incorrect password',
+                    timer: 3000,
+                    position: 'top-right',
+                    showConfirmButton: false
+                });
+            }
+        } catch (error) {
+            console.error("Error parsing user data:", error);
+            Swal.fire({
+                toast: true,
+                icon: 'error',
+                title: 'Oops...',
+                text: 'An error occurred. Please try again.',
+                timer: 3000,
+                position: 'top-right',
+                showConfirmButton: false
+            });
+        }
+    } else {
+        Swal.fire({
+            toast: true,
+            icon: 'error',
+            title: 'Oops...',
+            text: 'User  not found',
+            timer: 3000,
+            position: 'top-right',
+            showConfirmButton: false
+        });
+    }
+});
+  </script>
+</body>
 </html>

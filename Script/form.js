@@ -73,7 +73,7 @@ document.getElementById("registerForm").addEventListener("submit", function(even
                 showConfirmButton: false
             });
             setTimeout(() => {
-                window.location.href = "/login.html"
+                window.location.href = "/index.html"
             }, 2000);
         } catch (error) {
             console.error("Error storing data in local storage:", error);
