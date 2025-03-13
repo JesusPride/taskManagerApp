@@ -39,7 +39,7 @@ function addTask() {
     const priority = document.getElementById("priority").value;
     const category = document.getElementById("category").value;
 
-    if (!name || !dueDate || !category) {
+    if (!name || !dueDate || !category || !priority) {
         Swal.fire({
             icon: 'error',
             title: 'Missing Information',
