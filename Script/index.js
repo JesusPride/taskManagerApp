@@ -145,7 +145,7 @@ function updateTaskList(tasks = taskManager.tasks) {
         //         priorityClass = "";
             
         // }
-
+       
         let priorityClass = "";
         if (task.priority === "low") {
             priorityClass = "priority-low"
@@ -266,14 +266,34 @@ function toggleCompletion(taskId) {
     updateDashboard();
 }
 
-
-
 function deleteTask(taskId) {
-    if(confirm ("Are you sure you want to delete this task?")) {
-        taskManager.tasks = taskManager.tasks.filter((task) => task.id !== taskId);
-        saveTasks();
-        filterTasks();
-        updateDashboard();
+    if (taskId) {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to undo this action!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                taskManager.tasks = taskManager.tasks.filter(task => task.id !== parseInt(taskId));
+
+                saveTasks();
+                filterTasks();
+                updateDashboard();
+
+                
+                Swal.fire({
+                    icon: "success",
+                    title: "Deleted!",
+                    text: "Your task has been deleted.",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
+        });
     }
 }
 
