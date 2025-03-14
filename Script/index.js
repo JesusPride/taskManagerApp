@@ -160,7 +160,7 @@ function updateTaskList(tasks = taskManager.tasks) {
                 <div class = "top">
                     <input type="checkbox" ${task.status === "completed" ? "checked" : ""} onchange="toggleCompletion(${task.id})"/>
                      <strong>${task.name}</strong>
-                     <p>${task.description}</p>
+                     <p class="ms-3">${task.description}</p>
                 <div>
                     <span class="badge bg-info">${task.category}</span>
                     <span class= "badge ${priorityClass}">Priority: ${task.priority}</span> <br>
