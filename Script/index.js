@@ -17,7 +17,7 @@ document.querySelectorAll(".nav-link").forEach(link => {
 });
 
 
-// Task manager object to store tasks
+
 const taskManager = {
     tasks: JSON.parse(localStorage.getItem("tasks")) || []
 };
@@ -49,7 +49,6 @@ function addTask() {
     }
     
     if (taskId) {
-        // Update existing task
         const task = taskManager.tasks.find(task => task.id === parseInt(taskId));
         if (task) {
             task.name = name;
@@ -59,7 +58,6 @@ function addTask() {
             task.category = category;
         }
     } else {
-        // Add new Task
         const newTask = {
             id: Date.now(),
             name,
@@ -130,21 +128,6 @@ function updateTaskList(tasks = taskManager.tasks) {
             taskItem.classList.add("completed-task","text-muted", "bg-light");
         }
 
-        // let priorityClass = "";
-        // switch (task.priority) {
-        //     case "low":
-        //         priorityClass = "priority-low";
-        //         break;
-        //     case "medium":
-        //         priorityClass = "priority-medium";
-        //         break;
-        //     case "high":
-        //         priorityClass = "priority-high";
-        //         break;
-        //     default:
-        //         priorityClass = "";
-            
-        // }
        
         let priorityClass = "";
         if (task.priority === "low") {
@@ -210,7 +193,7 @@ function updatePaginationControls(totalTasks) {
         return pageItem;
     };
 
-    // Previous button
+   
     const prevItem = document.createElement("li");
     prevItem.className = "page-item" + (currentPage === 1 ? " disabled" : "");
     const prevLink = document.createElement("a");
@@ -226,13 +209,13 @@ function updatePaginationControls(totalTasks) {
     prevItem.appendChild(prevLink);
     paginationList.appendChild(prevItem);
 
-    // Page numbers
+  
     for (let i = 1; i <= totalPages; i++) {
         const pageItem = createPageItem(i, i === currentPage);
         paginationList.appendChild(pageItem);
     }
 
-    // Next button
+  
     const nextItem = document.createElement("li");
     nextItem.className = "page-item" + (currentPage === totalPages ? " disabled" : "");
     const nextLink = document.createElement("a");
@@ -326,7 +309,6 @@ function updateDashboard(){
     document.getElementById("pendingTasksCount").innerText = pending;
     document.getElementById("completedTasksCount").innerText = completed;
 
-    // Count tasks by category
     const work = taskManager.tasks.filter(task => task.category.toLowerCase() === "work").length;
     const personal = taskManager.tasks.filter(task => task.category.toLowerCase() === "personal").length;
     const shopping = taskManager.tasks.filter(task => task.category.toLowerCase() === "shopping").length;
@@ -385,12 +367,16 @@ function updateDonutChart(work, personal, shoping) {
 
 // Event Listeners
 window.onload = () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const fullName = user.fullName;
+    const firstName = fullName.split(" ")[0];
+    const welcomeMessageElement = document.getElementById("welcome-message");
+    welcomeMessageElement.textContent = `Welcome, ${firstName}!`;
     document.getElementById("filterAll").classList.add("active");
     filterTasks();
     updateDashboard();
 };
 
-// Filter Buttons
 ["filterAll", "filterPending", "filterCompleted"].forEach(id => {
     document.getElementById(id).addEventListener("click", () => {
         document.querySelectorAll(".btn-group .btn").forEach(btn => btn.classList.remove("active"));
@@ -399,7 +385,7 @@ window.onload = () => {
     });
 });
 
-// Filter Section Event Listeners
+
 document.getElementById("searchInput").addEventListener("input", filterTasks);
 document.getElementById("priorityFilter").addEventListener("change", filterTasks);
 document.getElementById("categoryFilter").addEventListener("change", filterTasks);
