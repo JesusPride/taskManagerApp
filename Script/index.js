@@ -390,7 +390,9 @@ window.onload = () => {
     const fullName = user.fullName;
     const firstName = fullName.split(" ")[0];
     const welcomeMessageElement = document.getElementById("welcome-message");
-    welcomeMessageElement.textContent = `Welcome, ${firstName}!`;
+    welcomeMessageElement.textContent = `Welcome, ${firstName}! \u{1F44B}`;
+    welcomeMessageElement.style.color = `blue`;
+    welcomeMessageElement.style.fontSize = `25px`
     document.getElementById("filterAll").classList.add("active");
     filterTasks();
     updateDashboard();
