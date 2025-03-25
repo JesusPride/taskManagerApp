@@ -17,21 +17,30 @@ document.querySelectorAll(".nav-link").forEach(link => {
 });
 
 
-// Task manager object to store tasks
+
 const taskManager = {
-    tasks: JSON.parse(localStorage.getItem("tasks")) || []
+    // tasks: JSON.parse(localStorage.getItem("tasks")) || []
+    getTasks: function(emailAddress){
+        const tasks = localStorage.getItem(`tasks-${emailAddress}`);
+        return tasks ? JSON.parse(tasks) : [];
+    },
+    saveTasks: function(emailAddress, tasks){
+        localStorage.setItem(`tasks-${emailAddress}`, JSON.stringify(tasks));
+    }
 };
 
-function saveTasks() {
+// function saveTasks() {
     // console.log("Saving tasks:", taskManager.tasks);
-    localStorage.setItem("tasks", JSON.stringify(taskManager.tasks));
-}
+    // localStorage.setItem("tasks", JSON.stringify(taskManager.tasks));
+// }
 
 
 function addTask() {
     document.querySelector("[data-bs-toggle='modal']").addEventListener("click", function() {
         document.getElementById("taskId").value = "";
     });
+    const emailAddress = JSON.parse(localStorage.getItem("user")).emailAddress;
+    const tasks = taskManager.getTasks(emailAddress);
     const taskId = document.getElementById("taskId").value;
     const name = document.getElementById("taskName").value.trim();
     const description = document.getElementById("taskDescription").value.trim();
@@ -49,8 +58,7 @@ function addTask() {
     }
     
     if (taskId) {
-        // Update existing task
-        const task = taskManager.tasks.find(task => task.id === parseInt(taskId));
+        const task = tasks.find(task => task.id === parseInt(taskId));
         if (task) {
             task.name = name;
             task.description = description;
@@ -59,7 +67,6 @@ function addTask() {
             task.category = category;
         }
     } else {
-        // Add new Task
         const newTask = {
             id: Date.now(),
             name,
@@ -70,10 +77,11 @@ function addTask() {
             status: "pending",
         };
        
-        taskManager.tasks.push(newTask);
+        tasks.push(newTask);
     }
 
-    saveTasks();
+    taskManager.saveTasks(emailAddress, tasks)
+    // saveTasks();
     filterTasks();
     updateTaskList()
     updateDashboard();
@@ -97,7 +105,7 @@ let currentPage =1;
 const tasksPerPage = 5;
 
 
-function updateTaskList(tasks = taskManager.tasks) {
+function updateTaskList(tasks = taskManager.getTasks(JSON.parse(localStorage.getItem("user")).emailAddress)) {
     const taskList = document.getElementById("taskList");
     taskList.innerHTML = "";
 
@@ -130,21 +138,6 @@ function updateTaskList(tasks = taskManager.tasks) {
             taskItem.classList.add("completed-task","text-muted", "bg-light");
         }
 
-        // let priorityClass = "";
-        // switch (task.priority) {
-        //     case "low":
-        //         priorityClass = "priority-low";
-        //         break;
-        //     case "medium":
-        //         priorityClass = "priority-medium";
-        //         break;
-        //     case "high":
-        //         priorityClass = "priority-high";
-        //         break;
-        //     default:
-        //         priorityClass = "";
-            
-        // }
        
         let priorityClass = "";
         if (task.priority === "low") {
@@ -210,7 +203,7 @@ function updatePaginationControls(totalTasks) {
         return pageItem;
     };
 
-    // Previous button
+   
     const prevItem = document.createElement("li");
     prevItem.className = "page-item" + (currentPage === 1 ? " disabled" : "");
     const prevLink = document.createElement("a");
@@ -226,13 +219,13 @@ function updatePaginationControls(totalTasks) {
     prevItem.appendChild(prevLink);
     paginationList.appendChild(prevItem);
 
-    // Page numbers
+  
     for (let i = 1; i <= totalPages; i++) {
         const pageItem = createPageItem(i, i === currentPage);
         paginationList.appendChild(pageItem);
     }
 
-    // Next button
+  
     const nextItem = document.createElement("li");
     nextItem.className = "page-item" + (currentPage === totalPages ? " disabled" : "");
     const nextLink = document.createElement("a");
@@ -256,12 +249,15 @@ function updatePaginationControls(totalTasks) {
 function toggleCompletion(taskId) {
 
     // const checkbox = document.getElementById("check");
-    const task = taskManager.tasks.find(task => task.id === taskId);
+    const emailAddress = JSON.parse(localStorage.getItem("user")).emailAddress;
+    const tasks = taskManager.getTasks(emailAddress);
+    const task = tasks.find(task => task.id === taskId);
     if (!task) return;
 
     task.status = task.status === "completed" ? "pending" : "completed";
     // checkbox.checked = task.status === "completed",
-    saveTasks();
+    // saveTasks();
+    taskManager.saveTasks(emailAddress, tasks);
     filterTasks();
     updateDashboard();
 }
@@ -278,9 +274,11 @@ function deleteTask(taskId) {
             confirmButtonText: "Yes, delete it!"
         }).then((result) => {
             if (result.isConfirmed) {
-                taskManager.tasks = taskManager.tasks.filter(task => task.id !== parseInt(taskId));
-
-                saveTasks();
+                const emailAddress = JSON.parse(localStorage.getItem("user")).emailAddress;
+                let tasks = taskManager.getTasks(emailAddress);
+                tasks = tasks.filter(task => task.id !== parseInt(taskId));
+                // taskManager.tasks = taskManager.tasks.filter(task => task.id !== parseInt(taskId));
+                taskManager.saveTasks(emailAddress, tasks);
                 filterTasks();
                 updateDashboard();
 
@@ -299,7 +297,9 @@ function deleteTask(taskId) {
 
 
 function editTask(taskId) {
-    const task = taskManager.tasks.find((task) => task.id === taskId);
+    const emailAddress = JSON.parse(localStorage.getItem("user")).emailAddress;
+    const tasks = taskManager.getTasks(emailAddress);
+    const task = tasks.find((task) => task.id === taskId);
     if (!task) return;
 
     document.getElementById("taskId").value = task.id;
@@ -318,18 +318,19 @@ function editTask(taskId) {
 }
 
 function updateDashboard(){
-    const total = taskManager.tasks.length;
-    const pending = taskManager.tasks.filter(task => task.status === "pending").length;
-    const completed = taskManager.tasks.filter(task => task.status === "completed").length;
+    const emailAddress = JSON.parse(localStorage.getItem("user")).emailAddress;
+    const tasks = taskManager.getTasks(emailAddress);
+    const total = tasks.length;
+    const pending = tasks.filter(task => task.status === "pending").length;
+    const completed = tasks.filter(task => task.status === "completed").length;
 
     document.getElementById("totalTasksCount").innerText = total;
     document.getElementById("pendingTasksCount").innerText = pending;
     document.getElementById("completedTasksCount").innerText = completed;
 
-    // Count tasks by category
-    const work = taskManager.tasks.filter(task => task.category.toLowerCase() === "work").length;
-    const personal = taskManager.tasks.filter(task => task.category.toLowerCase() === "personal").length;
-    const shopping = taskManager.tasks.filter(task => task.category.toLowerCase() === "shopping").length;
+    const work = tasks.filter(task => task.category.toLowerCase() === "work").length;
+    const personal = tasks.filter(task => task.category.toLowerCase() === "personal").length;
+    const shopping = tasks.filter(task => task.category.toLowerCase() === "shopping").length;
 
 
 
@@ -385,12 +386,18 @@ function updateDonutChart(work, personal, shoping) {
 
 // Event Listeners
 window.onload = () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const fullName = user.fullName;
+    const firstName = fullName.split(" ")[0];
+    const welcomeMessageElement = document.getElementById("welcome-message");
+    welcomeMessageElement.textContent = `Welcome, ${firstName}! \u{1F44B}`;
+    welcomeMessageElement.style.color = `blue`;
+    welcomeMessageElement.style.fontSize = `25px`
     document.getElementById("filterAll").classList.add("active");
     filterTasks();
     updateDashboard();
 };
 
-// Filter Buttons
 ["filterAll", "filterPending", "filterCompleted"].forEach(id => {
     document.getElementById(id).addEventListener("click", () => {
         document.querySelectorAll(".btn-group .btn").forEach(btn => btn.classList.remove("active"));
@@ -399,53 +406,55 @@ window.onload = () => {
     });
 });
 
-// Filter Section Event Listeners
+
 document.getElementById("searchInput").addEventListener("input", filterTasks);
 document.getElementById("priorityFilter").addEventListener("change", filterTasks);
 document.getElementById("categoryFilter").addEventListener("change", filterTasks);
 document.getElementById("sortBy").addEventListener("change", filterTasks);
 
 function filterTasks() {
+    const emailAddress = JSON.parse(localStorage.getItem("user")).emailAddress;
+    const tasks = taskManager.getTasks(emailAddress);
     const search = document.getElementById("searchInput").value.toLowerCase();
     const priority = document.getElementById("priorityFilter").value;
     const category = document.getElementById("categoryFilter").value;
     const sort = document.getElementById("sortBy").value;
     const selectedStatus = document.querySelector(".btn-group .active")?.innerText.toLowerCase() || "all";
 
-    let tasks = [...taskManager.tasks];
+    let filteredTasks = [...tasks];
 
     if (search) {
-        tasks = tasks.filter(task => 
+        filteredTasks = filteredTasks.filter(task => 
             task.name.toLowerCase().includes(search) || 
             task.description.toLowerCase().includes(search)
         );
     }
 
     if (priority) {
-        tasks = tasks.filter(task => task.priority === priority);
+        filteredTasks = filteredTasks.filter(task => task.priority === priority);
     }
 
     if (category) {
-        tasks = tasks.filter(task =>
+        filteredTasks = filteredTasks.filter(task =>
              task.category.toLowerCase() === category.toLowerCase());
     }
 
     if (selectedStatus !== "all") {
         if (selectedStatus === "pending" || selectedStatus === "completed") {
-            tasks = tasks.filter(task => task.status === selectedStatus);
+            filteredTasks = filteredTasks.filter(task => task.status === selectedStatus);
         }
     }
 
     if (sort === "dueDate") {
-        tasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+        filteredTasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
     } else if (sort === "priority") {
         const priorityOrder = { low: 1, medium: 2, high: 3 };
-        tasks.sort((a, b) => priorityOrder[b.priority] - priorityOrder[a.priority]);
+        filteredTasks.sort((a, b) => priorityOrder[b.priority] - priorityOrder[a.priority]);
     } else if (sort === "name") {
-        tasks.sort((a, b) => a.name.localeCompare(b.name));
+        filteredTasks.sort((a, b) => a.name.localeCompare(b.name));
     }
 
-    updateTaskList(tasks);
+    updateTaskList(filteredTasks);
     // updateDashboard();
 }
 
